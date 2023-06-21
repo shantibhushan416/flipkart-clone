@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState,useContext } from "react";
 import { Box, Button, Dialog, TextField, Typography, styled } from "@mui/material"
-import {authenticateSignup} from "../../service/Api";
+import {authenticateSignup,authenticateLogIn} from "../../service/Api";
+import { DataContext } from "../../context/DataProvider";
 
 const Component = styled(Box)`
 height: 70vh;
@@ -17,6 +18,13 @@ padding: 45px 35px;
 }
 `;
 
+const Error = styled(Typography)`
+font-size: 14px;
+color: #ff6161;
+line-height: 0;
+margin-top: 10px;
+font-weight: 600
+`;
 const Wrapper = styled(Box)`
 display: flex;
 flex-direction: column;
@@ -80,14 +88,26 @@ const signUpIntialValues = {
     phone:"",
 
 }
+
+const loginIntialValues={
+    userName:"",
+    password:""
+}
 const LoginDialog = ({open, setOpen}) => {
 
     const [account, toggleAccount]  = useState(accountIntialValue.login);
-    const [signUp,SetSignUp] = useState(signUpIntialValues)
+    const [signUp,SetSignUp] = useState(signUpIntialValues);
+    const [login, setLogin] = useState(loginIntialValues);
+    const [error,setError] = useState(false)
+
+
+    const {setAccount} = useContext(DataContext);
+    
     
     const HandleClose = () => {
         setOpen(false);
-        toggleAccount(accountIntialValue.login)
+        toggleAccount(accountIntialValue.login);
+        setError(false);
     }
     const onHandSignUp = () => {
         toggleAccount(accountIntialValue.signUp)
@@ -100,7 +120,28 @@ const LoginDialog = ({open, setOpen}) => {
 
     const signupUser = async () => {
        let response =  await authenticateSignup(signUp);
+       if(!response) return;
+       HandleClose()
+       setAccount(signUp.firstName);
+       
     }
+
+    const onValueChange = (e) => {
+        setLogin({...login, [e.target.name]: e.target.value})
+     }
+
+    const loginUser = async () => {
+        let response =  await authenticateLogIn(login);
+        if(response.status === 200){
+            HandleClose();
+            setAccount(response.data.data.firstName)
+        }
+        else{
+            setError(true)
+        }
+        
+        
+     }
 
     return (
         <Dialog open={open} onClose={HandleClose}PaperProps={{sx: {maxWidth: 'unset'}}} >
@@ -111,10 +152,11 @@ const LoginDialog = ({open, setOpen}) => {
                         <Typography style={{marginTop: 20}}>{account.subHeading}</Typography>
                     </Image>
                    { (account.view === "login") ? <Wrapper>
-                        <TextField variant="standard" label="Enter Email/Mobile number" />
-                        <TextField variant="standard" label="Enter Password" />
+                        <TextField variant="standard" label="Enter UserName" name="userName" onChange={(e) => onValueChange(e)}/>
+                       {error && <Error>Please enter valid username or password</Error>}
+                        <TextField variant="standard" label="Enter Password" name="password"  onChange={(e) => onValueChange(e)}/>
                         <Text>By continuing, you agree to flipkart's Terms of use and Privacy Policy.</Text>
-                        <LoginButton>Login</LoginButton>
+                        <LoginButton onClick={()=> loginUser()} >Login</LoginButton>
                         <Typography style={{textAlign:"center"}} >Or</Typography>
                         <RequestOTPButton>Request OTP</RequestOTPButton>
                         <CreateAccount onClick={() => onHandSignUp()}>New to Flipkart? Create an account</CreateAccount>
@@ -123,7 +165,7 @@ const LoginDialog = ({open, setOpen}) => {
                     <Wrapper>
                         <TextField variant="standard" name="firstName" label="Enter Firstname" onChange={(e) => onHandleChange(e)} />
                         <TextField variant="standard" name="lastName" label="Enter Lastname" onChange={(e) => onHandleChange(e)} />
-                        <TextField variant="standard" name="userName" label="Enter Usermame" onChange={(e) => onHandleChange(e)} />
+                        <TextField variant="standard" name="userName" label="Enter Username" onChange={(e) => onHandleChange(e)} />
                         <TextField variant="standard" name="email" label="Enter Email" onChange={(e) => onHandleChange(e)} />
                         <TextField variant="standard" name="password" label="Enter Password" onChange={(e) => onHandleChange(e)} />
                         <TextField variant="standard"name="phone" label="Enter Phone" onChange={(e) => onHandleChange(e)} />
@@ -137,4 +179,4 @@ const LoginDialog = ({open, setOpen}) => {
 }
 
 
-export default LoginDialog
+export default LoginDialog 
