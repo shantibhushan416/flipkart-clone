@@ -1,12 +1,26 @@
 import { AppBar,Toolbar,styled,Box,Typography } from "@mui/material"
+
 import Search from "./Search";
 import CustomButtons from "./CustomButtons";
 
+import { Link } from "react-router-dom";
 
 
-const StyledHeader  = styled(AppBar)`background: #2874f0; height: 55px`;
-const Components  = styled(Box)`margin-left: 12%; line-height : 0;`;
-const SubHeading = styled(Typography)`font-size: 10px; font-style: italic`;
+
+const StyledHeader  = styled(AppBar)`
+background: #2874f0;
+height: 55px`;
+
+const Components  = styled(Link)`
+margin-left: 12%; 
+line-height : 0;
+cursor: pointer;
+text-decoration: none`;
+
+const SubHeading = styled(Typography)`
+font-size: 10px; 
+font-style: italic`;
+
 const PlusImg = styled("img")({
     width: 10,
     height: 10,
@@ -21,13 +35,15 @@ const Header = () => {
     return(<div>
         <StyledHeader>
             <Toolbar style={{minHeight: 55}}>
-                <Components>
-                    <img src={logoURL} alt="logo" style={{width: 75}} />
-                    <Box style={{display:"flex"}}>
-                        <SubHeading>Explore <Box component="span" style ={{color: "#ffe500"}}>Plus</Box></SubHeading>
-                        <PlusImg src={subURL} alt="sub-logo"/>
-                    </Box>
-                </Components>
+              
+                    <Components to="/" >
+                        <img src={logoURL} alt="logo" style={{width: 75}} />
+                        <Box style={{display:"flex"}}>
+                            <SubHeading>Explore <Box component="span" style ={{color: "#ffe500"}}>Plus</Box></SubHeading>
+                            <PlusImg src={subURL} alt="sub-logo"/>
+                        </Box>
+                    </Components>
+                
                 <Search/>
                 <CustomButtonWrapper>
                     <CustomButtons/>
