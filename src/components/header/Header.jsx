@@ -1,9 +1,13 @@
-import { AppBar,Toolbar,styled,Box,Typography } from "@mui/material"
+import { useState } from "react";
+
+
+import { Link } from "react-router-dom";
 
 import Search from "./Search";
 import CustomButtons from "./CustomButtons";
 
-import { Link } from "react-router-dom";
+import { AppBar,Toolbar,Drawer,Box,Typography, IconButton,List,ListItem, styled } from "@mui/material";
+import { Menu} from '@mui/icons-material';
 
 
 
@@ -27,15 +31,51 @@ const PlusImg = styled("img")({
     marginLeft: 4
     
 })
-const CustomButtonWrapper = styled(Box)`margin: 0 5% 0 auto`
+const CustomButtonWrapper = styled(Box)(({theme})=> ({
+    margin: "0 5% 0 auto",
+    [theme.breakpoints.down("md")]:{
+        display: "none",
+    }
+}));
+
+const MenuButton = styled(IconButton)(({theme}) => ({
+    display: "none",
+    [theme.breakpoints.down("md")]:{
+        display: "block"
+    }
+}))
 
 const Header = () => {
     const logoURL = 'https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/flipkart-plus_8d85f4.png';
     const subURL = 'https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/plus_aef861.png';
+
+    const [open,setOpen] = useState(false);
+
+    const handleOpen = () => {
+        setOpen(true)
+    }
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const list = () => (
+        <Box style={{width: 200}} onClick={handleClose}>
+            <List>
+                <ListItem>
+                    <CustomButtons/>
+                </ListItem>
+            </List>
+        </Box>
+    )
     return(<div>
         <StyledHeader>
             <Toolbar style={{minHeight: 55}}>
-              
+            <MenuButton  color="inherit" onClick={handleOpen}>
+                <Menu/>
+            </MenuButton>
+            <Drawer open={open} onClose={handleClose}>
+                {list()}
+            </Drawer>
                     <Components to="/" >
                         <img src={logoURL} alt="logo" style={{width: 75}} />
                         <Box style={{display:"flex"}}>

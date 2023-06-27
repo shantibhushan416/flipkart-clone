@@ -5,9 +5,9 @@ import {useDispatch,useSelector} from 'react-redux';
 
 import NavBar from "./NavBar";
 import Banner from "./Banner";
-import Slide from "../header/Slide";
-import MidSlide from "../header/MidSlide";
-import MidSection from "../header/MidSection";
+import Slide from "./Slide";
+import MidSection from "./MidSection";
+import MidSlide from "./MidSlide";
 
 
 import { getProducts } from "../../redux/action/ProductAction";
@@ -22,7 +22,6 @@ const Component = styled(Box)`
 const Home = () => {
 
     const {products} =  useSelector(state => state.getProducts);
-
    
 
     const dispatch = useDispatch()

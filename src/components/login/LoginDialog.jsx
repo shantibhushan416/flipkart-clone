@@ -1,6 +1,7 @@
 import { useState,useContext } from "react";
 import { Box, Button, Dialog, TextField, Typography, styled } from "@mui/material"
 import {authenticateSignup,authenticateLogIn} from "../../service/Api";
+
 import { DataContext } from "../../context/DataProvider";
 
 const Component = styled(Box)`
