@@ -7,6 +7,7 @@ const url = "http://localhost:8000";
 export const getProducts = () => async (dispatch) => {
   try {
     const { data } = await axios.get(`${url}/products`);
+    console.log(data);
 
     dispatch({ type: actionTypes.GET_PRODUCTS_SUCCESS, payload: data });
   } catch (error) {
@@ -18,7 +19,7 @@ export const getProductDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: actionTypes.GET_PRODUCT_DETAILS_REQUEST });
     const { data } = await axios.get(`${url}/product/${id}`);
-
+    console.log(data);
     dispatch({ type: actionTypes.GET_PRODUCT_DETAILS_SUCCESS, payload: data });
   } catch (error) {
     dispatch({

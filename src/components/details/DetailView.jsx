@@ -36,7 +36,7 @@ const DetailView = () => {
     const {id} = useParams();
 
     const {loading, product} =  useSelector(state => state.getProductDetails)
-    console.log(product)
+
 
     useEffect(() => {
         dispatch(getProductDetails(id))
@@ -51,19 +51,19 @@ const DetailView = () => {
                 <Grid item lg={4} md={4} sm={8} xs={12}>
                     <ActionItems product={product} />
                 </Grid>
-                   { product.map((data) => (
+                   
                    <RightContainer item lg={8} md={8} sm={8} xs={12}>
                         <ProductDetail 
                         product={product}
                         fassured={fassured}
-                        title={data.title.longTitle}
-                        cost={data.price.cost}
-                        mrp={data.price.mrp}
-                        discount={data.price.discount}
-                        description={data.description}
+                        title={product.title.longTitle}
+                        cost={product.price.cost}
+                        mrp={product.price.mrp}
+                        discount={product.price.discount}
+                        description={product.description}
                         />
                         
-                    </RightContainer>))}
+                    </RightContainer>
         </Container>
                 
                 

@@ -16,7 +16,8 @@ const SearchContainer = styled(Box)`
 
 const InputContainer = styled(InputBase)`
     padding-left: 20px; 
-    width: 100%; font-size: unset`;
+    width: 100%; 
+    font-size: unset`;
 
 const SearchIconWrapper = styled(Box)`
     color: blue;
