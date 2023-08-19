@@ -4,6 +4,8 @@ import { Box, Button, styled } from "@mui/material";
 import { ShoppingCart as Cart, FlashOn as Flash } from "@mui/icons-material";
 import { addToCart } from "../../redux/action/CartActions";
 import { useState } from "react";
+import { payUsingPayTm } from "../../service/Api";
+import { post } from "../../utils/PaytmUtils";
 
 const LeftContainer = styled(Box)(({ theme }) => ({
   minWidth: "40%",
@@ -36,26 +38,37 @@ const ActionItems = ({ product }) => {
 
   const [quantity, setQuantity] = useState(1);
 
-
- const {id} = product;
+  const { id } = product;
 
   const addToCartItem = () => {
-    dispatch(addToCart(id,quantity));
+    dispatch(addToCart(id, quantity));
     navigate("/cart");
   };
+
+  const buyNow = async () => {
+    let response = await payUsingPayTm({
+      amount: 500,
+      email: "shantibhushan107@gmail.com",
+    });
+    var information = {
+      action: "https://securegw-stage.paytm.in/order/process",
+      params: response,
+    };
+    post(information);
+  };
+
   return (
     <LeftContainer>
-     
-        <Box
-          style={{
-            padding: "15px 20px",
-            width: "90%",
-            border: "1px solid #f0f0f0",
-          }}
-        >
-          <Image src={product.detailUrl} alt="" style={{ width: "100%" }} />
-        </Box>
-     
+      <Box
+        style={{
+          padding: "15px 20px",
+          width: "90%",
+          border: "1px solid #f0f0f0",
+        }}
+      >
+        <Image src={product.detailUrl} alt="" style={{ width: "100%" }} />
+      </Box>
+
       <StyledButton
         style={{ marginRight: 10, background: "#ff9f00" }}
         variant="contained"
@@ -64,7 +77,11 @@ const ActionItems = ({ product }) => {
         <Cart />
         Add to Cart
       </StyledButton>
-      <StyledButton style={{ background: "#fb641b" }} variant="contained">
+      <StyledButton
+        style={{ background: "#fb641b" }}
+        variant="contained"
+        onClick={() => buyNow()}
+      >
         <Flash /> Buy Now
       </StyledButton>
     </LeftContainer>
